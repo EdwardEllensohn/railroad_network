@@ -1,6 +1,14 @@
+#IEMS 313 Project Phase 1
+#
+#Eddie, Jack, Vicky 
+
+
+
+#Writen for Python 3.5.1 :: Anaconda 4.0.0 (64-bit)
+
+#Should work with any python 3 distribution with networkx library 
 import math
 import networkx as nx
-import matplotlib.pyplot as plt
 
 
 
@@ -66,7 +74,7 @@ class Shipment(object):
 		print('Shipment from {0} to {1} with total volume {2}:'.format(\
 			self.origin, self.destination, self.total_volume))
 		for itr, item in enumerate(self.paths):
-			print('Path {0}: {1} with volume {2}'.format(itr+1, \
+			print('  Path {0}: {1} with volume {2}'.format(itr+1, \
 				item, self.path_vols[itr]))
 			
 
@@ -101,8 +109,7 @@ def initNetwork(shipment_list):
 
 
 	#################################33
-	###Need to figure out how to put shipment data in?	
-
+	### Add current shipments#################
 	for x in Net.nodes():
 		nx.get_node_attributes(Net,'obj')[x].fill(shipment_list)
 		#print(nx.get_node_attributes(Net,'obj')[x].ship_in) #for debuging
@@ -119,11 +126,12 @@ def initNetwork(shipment_list):
 
 
 
-#create a psuedonetwork for shortest path purposes
+
 def costUpdate(Net):
 	global rscost
 	global stations_data
 	global track_data
+	#create a psuedonetwork for shortest path purposes
 	pNet = nx.MultiDiGraph()
 	cost_dictionary = {}
 	#iterate through the real network, calculate costs, build the psuedonetwork
@@ -153,7 +161,7 @@ def costUpdate(Net):
 
 					#if not enough reloading stations at destination, add that cost
 					if 5*nx.get_node_attributes(Net,'obj')[j].reloading_buildings < \
-						(nx.get_node_attributes(Net,'obj')[j].ship_in + 1):
+						(nx.get_node_attributes(Net,'obj')[j].ship_in + 1) & (key == 0):
 						#rscost is reloading station cost
 						cost += rscost
 					if pNet.has_edge(i,j):
@@ -189,25 +197,26 @@ def CheapestPath(Net, pNet, cost_dictionary, origin, destination, depth):
 		x = Net.get_edge_data(cpath[i],cpath[i+1])
 		if type(x) is dict:
 			#iterate through each edge in dictionary of edges along that path
+			#print(x) #print edge objects for debuging
 			for key in x:
 				#if no edges along the path are built
 				if all(x[key]['obj'].is_built == 0 for key in x):
-					print('-build path and track from {0} to {1}'\
+					print('  -build path and track from {0} to {1}'\
 						.format(cpath[i],cpath[i+1]))
 					track_data.append([cpath[i],cpath[i+1],1])
 				
 				#if line built but at capacity, need to build another so add that cost
-				if (x[key]['obj'].load + 1) > 10:
-					print('-build track from {0} to {1}'\
+				if all((x[key]['obj'].load + 1) > 10 for key in x):
+					print('  -build track from {0} to {1}'\
 						.format(cpath[i],cpath[i+1]))
 					track_data.append([cpath[i],cpath[i+1],1])
 
-				#if not enough reloading stations at destination, add that cost
-				if 5*nx.get_node_attributes(Net,'obj')[cpath[i+1]].reloading_buildings < \
-					(nx.get_node_attributes(Net,'obj')[cpath[i+1]].ship_in + 1):
-					print('-build reloading building at station {0}'\
-						.format(cpath[i]))
-					stations_data[cpath[i+1]-1][2] += 1
+			#if not enough reloading stations at destination, add that cost
+			if 5*nx.get_node_attributes(Net,'obj')[cpath[i+1]].reloading_buildings < \
+				(nx.get_node_attributes(Net,'obj')[cpath[i+1]].ship_in + 1):
+				print('  -build reloading building at station {0}'\
+					.format(cpath[i]))
+				stations_data[cpath[i+1]-1][2] += 1
 
 	return 	[origin, destination, cpath, ccost]
 
@@ -245,6 +254,11 @@ def addShipment(shipment_list, depth):
 
 
 #################Data################################
+## You can change these data for different situations, set for 
+#       initial condition in phase 1 
+
+
+
 rscost = 1000000
 
 stations_data = [[50,	0,		1,	0],
@@ -278,20 +292,30 @@ B = Shipment(3,2,3,path,vol)
 
 ###RUN THE HEURISTIC:
 
-#addShipment adds a shipment to the network derived from the above data
-#--first argument is a list of the  current shipments on the network
-#--second argument controls how long of a path the heuristic looks for 
-#        (Warning: second argument has an outsized effect on run time
-#                  and higher search depths do not necissarily yield 
-#                  better solutions)
 
-shipment_list = addShipment([A,B],7)
+shipment_list = [A,B]
+while 1:
+	#addShipment adds a shipment to the network derived from the above data
+	#--first argument is a list of the  current shipments on the network
+	#--second argument controls how long of a path the heuristic looks for 
+	#        (Warning: second argument has an outsized effect on run time
+	#                  and higher search depths do not necissarily yield 
+	#                  better solutions)
+	shipment_list = addShipment(shipment_list,7)
 
 
-#print the shipments on the network for easy viewing 
-print('\nList of all shipments on Network:')
-for i in shipment_list:
-	i.displayinfo()
+	#print the shipments on the network for easy viewing 
+	print('\nList of all shipments on Network:')
+	for i in shipment_list:
+		i.displayinfo()
+	#ask the user if they want to add another shipment or not
+	x = input('Add another shipment? (type "yes" to continue):')
+	print(x)
+	if x == 'yes':
+		print('\nNext iteration:')
+	else:
+		print('\nHave a nice day :)')
+		break
 
 
 
