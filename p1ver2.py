@@ -25,9 +25,19 @@ class Station(object):
 #railroad class, used as edge
 class Track(object):
 	"""Conains info about a track"""
-	def __init__(self, is_built, load):
+	def __init__(self, origin, destination, is_built, load, stations_data):
 		self.is_built = is_built
 		self.load = load
+		self.origin = origin
+		self.destination = destination
+		self.sd = stations_data
+	def fill(self, shipment_array):
+		pass
+		
+
+
+	
+	
 
 class Shipment(object):
 	"""Contains a shipment and its path"""
@@ -37,9 +47,24 @@ class Shipment(object):
 		self.total_volume = total_volume
 		self.paths = paths
 		self.path_vols = path_vols
-
+	def cost(self,cost_reloading_building, cost_per_mile_track, cost_per_mile_line):
+		for i in range(0,len(self.paths)):
+			for j in range(0,len(i)):
+				pass
+			
+##Function Definitions				
+def UpdateTrackCost(Net, rscost):
+	"takes a network and reloading_buildings cost and returns a \
+	network with cost parameters instead of objects on the edges"
+	for i in Net.nodes():
+		for j in Net.nodes():
+			x = Net.get_edge_data(i,j)
+			if type(x) is dict:
+				print(x['obj'].is_built)
 
 ##Data
+rscost = 1000000
+
 stations_data = [[50,	0,		1,	0],
 				 [250,	0,		1,	0],
 				 [100,	50,		2,	0],
@@ -49,8 +74,8 @@ stations_data = [[50,	0,		1,	0],
 				 [200,	200,	3,	0]]
 
 track_data = [	[1,3,1],
-				[1,4,1],
-				[2,5,1],
+				[4,1,1],
+				[5,2,1],
 				[3,5,1],
 				[4,6,1],
 				[5,7,1],
@@ -72,12 +97,14 @@ B = Shipment(3,2,3,path,vol)
 Net = nx.MultiDiGraph()
 #add all the stations
 for i in range(0,len(stations_data)):
-	Net.add_node(i + 1, obj = Station(i + 1, stations_data[i][2],stations_data[i][3]))
+	Net.add_node(i + 1, \
+		obj = Station(i + 1, stations_data[i][2],stations_data[i][3]))
 
 #add the existing tracks 
 for i in range(0,len(track_data)):
 	for j in range(0,track_data[i][2]):
-		Net.add_edge(track_data[i][0],track_data[i][1], Track(1,0))
+		Net.add_edge(track_data[i][0],track_data[i][1], \
+			obj = Track(track_data[i][0],track_data[i][1],1,0,stations_data))
 ###########################
 
 ###Add potential tracks###########
@@ -85,13 +112,113 @@ for i in range(0,len(track_data)):
 for i,x in enumerate(stations_data):
 	for j,y in enumerate(stations_data):
 		dist = math.hypot(x[0] - y[0], x[1] - y[1])
-		if (dist<=220)&(dist != 0):
-			Net.add_edge(i+1,j+1, Track(0,0))
+		if (dist<=220)&(dist != 0)&(~Net.has_edge(i+1,j+1)):
+			Net.add_edge(i+1,j+1, obj = Track(i+1,j+1,0,0,stations_data))
+			
 
-test = nx.get_node_attributes(Net,'obj')
-print(test[1].ship_in)
-test[1].fill([A,B])
-print(test[1].ship_in)
+################################
+
+
+#################################33
+###Need to figure out how to put shipment data in?	
+
+
+
+
+
+
+###########################3
+
+
+
+
+
+
+#create a psuedonetwork for shortest path purposes
+pNet = nx.MultiDiGraph()
+cost_dictionary = {}
+#iterate through the real network, calculate costs, build the psuedonetwork
+for i in Net.nodes():
+	for j in Net.nodes():
+		x = Net.get_edge_data(i,j)
+		if type(x) is dict:
+			#iterate through each edge in dictionary of edges along that path
+			for key in x:
+				#cost tracks cost of traversing this edge
+				cost = 0
+				#if no edges along the path are built
+				if all(x[key]['obj'].is_built == 0 for key in x):
+					#calculate distance
+					dist = math.hypot(stations_data[i-1][0] - stations_data[j-1][0], \
+						stations_data[i-1][1] - stations_data[j-1][1])
+					#multiply distance by 7000 and add to cost
+					cost += (7000 + 5000)*dist
+				
+				#if line built but at capacity, need to build another so add that cost
+				if (x[key]['obj'].load + 1) > 10:
+					#calculate distance
+					dist = math.hypot(stations_data[i-1][0] - stations_data[j-1][0], \
+						stations_data[i-1][1] - stations_data[j-1][1])
+					#multiply distance by 5000 and add to cost
+					cost += 5000*dist
+
+				#if not enough reloading stations at destination, add that cost
+				if 5*nx.get_node_attributes(Net,'obj')[j].reloading_buildings < \
+					(nx.get_node_attributes(Net,'obj')[j].ship_in + 1):
+					#rscost is reloading station cost
+					cost += rscost
+				if pNet.has_edge(i,j):
+					pass
+				pNet.add_edge(i, j, weight=cost)
+				cost_dictionary['{0}--->{1}'.format(i,j)] = cost
+
+
+nx.draw(pNet)
+
+
+
+
+
+
+
+def CheapestPath(pNet, origin, destination, depth):
+	"Iterates through every simple path calculating cost and finds the cheapest"
+	cost_path_dict = {}
+	for path in nx.all_simple_paths(pNet, source=origin, target=destination, cutoff = depth):
+		cost = 0
+		for i in range(0,len(path) - 1):
+			cost += cost_dictionary['{0}--->{1}'.format(path[i],path[i +1])]
+		cost_path_dict[cost] = path
+
+	print('Cheapest Path from {0} to {1} is {2} at ${3}'.format(origin,destination,\
+		cost_path_dict[min(list(cost_path_dict.keys()))], \
+		min(list(cost_path_dict.keys()))))
+
+
+
+
+CheapestPath(pNet, 6,3,7)
+
+
+
+
+##make sure to add the best path to network at the end
+
+
+#print(pNet.out_edges(4))
+
+
+plt.savefig("psuedonetwork.png")
+
+
+
+
+					
+
+
+		
+
+
 
 nx.draw(Net)
 plt.savefig("path.png")
