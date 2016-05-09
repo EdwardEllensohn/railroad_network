@@ -68,34 +68,35 @@ def UpdateTrackCost(Net, rscost):
 ##Data
 rscost = 1000000
 
-stations_data = [[50,	0,		1,	0],
-				 [250,	0,		1,	0],
-				 [100,	50,		2,	0],
-				 [0,	100,	3,	0],
-				 [200,	100,	2,	0],
+stations_data = [[50,	0,		2,	0],
+				 [250,	0,		2,	0],
+				 [100,	50,		3,	0],
+				 [0,	100,	2,	0],
+				 [200,	100,	3,	0],
 				 [100,	200,	2,	0],
 				 [200,	200,	3,	0]]
 
 track_data = [	[1,3,1],
 				[4,1,1],
 				[5,2,1],
-				[3,5,1],
+				[3,5,2],
 				[4,6,1],
 				[5,7,1],
+				[7,5,1],
 				[6,7,1]]
 
 #paths
 path = [[4,6,7],[4,1,3,5,7]]
 vol = [8,3]
-A = Shipment(4,7,11,path,vol)
+A = Shipment(4,7,sum(vol),path,vol)
 
 path = [[3,5,2]]
 vol = [3] 
-B = Shipment(3,2,3,path,vol)
+B = Shipment(3,2,sum(vol),path,vol)
 
-# path = [[4,1,3,5,2],[4,6,7,5,2]]
-# vol = [5,2] 
-# C = Shipment(4,2,7,path,vol)
+path = [[4,1,3,5,2],[4,6,7,5,2]]
+vol = [5,2] 
+C = Shipment(4,2,sum(vol),path,vol)
 
 
 
@@ -129,12 +130,12 @@ for i,x in enumerate(stations_data):
 ###Need to figure out how to put shipment data in?	
 
 for x in Net.nodes():
-	nx.get_node_attributes(Net,'obj')[1].fill([A,B])
-	print(nx.get_node_attributes(Net,'obj')[1].ship_in) #for debuging
+	nx.get_node_attributes(Net,'obj')[x].fill([A,B,C])
+	print(nx.get_node_attributes(Net,'obj')[x].ship_in) #for debuging
 
 
 for x in Net.edges():
-	Net.get_edge_data(x[0],x[1])[0]['obj'].fill([A,B])
+	Net.get_edge_data(x[0],x[1])[0]['obj'].fill([A,B,C])
 	print(Net.get_edge_data(x[0],x[1])[0]['obj'].load) #for debuging
 ###########################3
 
@@ -180,9 +181,6 @@ for i in Net.nodes():
 					pass
 				pNet.add_edge(i, j, weight=cost)
 				cost_dictionary['{0}--->{1}'.format(i,j)] = cost
-
-
-nx.draw(pNet)
 
 
 
