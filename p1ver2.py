@@ -32,9 +32,12 @@ class Track(object):
 		self.destination = destination
 		self.sd = stations_data
 	def fill(self, shipment_array):
-		pass
-		
-
+		for itr, item in enumerate(shipment_array):
+			for i in range(0,len(item.paths)):
+				for x in item.paths[i]:
+					for y in item.paths[i]:
+						if (x == self.origin) and (y == self.destination):
+							self.load += item.path_vols[i]
 
 	
 	
@@ -87,8 +90,9 @@ vol = [8,3]
 A = Shipment(4,7,11,path,vol)
 
 path = [[3,5,2]]
-vol = [3]
+vol = [3] 
 B = Shipment(3,2,3,path,vol)
+
 
 
 
@@ -122,11 +126,13 @@ for i,x in enumerate(stations_data):
 #################################33
 ###Need to figure out how to put shipment data in?	
 
+for x in Net.nodes():
+	nx.get_node_attributes(Net,'obj')[1].fill([A,B])	
 
 
-
-
-
+for x in Net.edges():
+	Net.get_edge_data(x[0],x[1])[0]['obj'].fill([A,B])
+	print(Net.get_edge_data(x[0],x[1])[0]['obj'].load) #for debuging
 ###########################3
 
 
@@ -196,8 +202,8 @@ def CheapestPath(pNet, origin, destination, depth):
 
 
 
-
-CheapestPath(pNet, 6,3,7)
+####this is the what runs:
+CheapestPath(pNet, 4,5,7)
 
 
 
