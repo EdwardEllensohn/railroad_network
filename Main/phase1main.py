@@ -53,10 +53,21 @@ class Shipment(object):
 		self.total_volume = total_volume
 		self.paths = paths
 		self.path_vols = path_vols
-	def cost(self,cost_reloading_building, cost_per_mile_track, cost_per_mile_line):
-		for i in range(0,len(self.paths)):
-			for j in range(0,len(i)):
-				pass
+	def update(self, path):
+		if path in self.paths:
+			for itr, i in enumerate(self.paths):
+				if i == path:
+					x = itr 
+			self.path_vols[x] += 1
+		else:
+			self.paths.append(path)
+			self.path_vols.append(1)
+	def displayinfo(self):
+		print('Shipment from {0} to {1} with total volume {2}:'.format(\
+			self.origin, self.destination, self.total_volume))
+		for itr, item in enumerate(self.paths):
+			print('Path {0}: {1} with volume {2}'.format(itr+1, \
+				item, self.path_vols[itr]))
 			
 
 ###Function Definitions
@@ -94,12 +105,12 @@ def initNetwork(shipment_list):
 
 	for x in Net.nodes():
 		nx.get_node_attributes(Net,'obj')[x].fill(shipment_list)
-		print(nx.get_node_attributes(Net,'obj')[x].ship_in) #for debuging
+		#print(nx.get_node_attributes(Net,'obj')[x].ship_in) #for debuging
 
 
 	for x in Net.edges():
 		Net.get_edge_data(x[0],x[1])[0]['obj'].fill(shipment_list)
-		print(Net.get_edge_data(x[0],x[1])[0]['obj'].load) #for debuging
+		#print(Net.get_edge_data(x[0],x[1])[0]['obj'].load) #for debuging
 	###########################3
 	return Net
 
@@ -109,7 +120,10 @@ def initNetwork(shipment_list):
 
 
 #create a psuedonetwork for shortest path purposes
-def costUpdate():
+def costUpdate(Net):
+	global rscost
+	global stations_data
+	global track_data
 	pNet = nx.MultiDiGraph()
 	cost_dictionary = {}
 	#iterate through the real network, calculate costs, build the psuedonetwork
@@ -154,7 +168,10 @@ def costUpdate():
 
 
 
-def CheapestPath(pNet, origin, destination, depth):
+def CheapestPath(Net, pNet, cost_dictionary, origin, destination, depth):
+	global rscost
+	global stations_data
+	global track_data
 	"Iterates through every simple path calculating cost and finds the cheapest"
 	cost_path_dict = {}
 	for path in nx.all_simple_paths(pNet, source=origin, target=destination, cutoff = depth):
@@ -190,10 +207,44 @@ def CheapestPath(pNet, origin, destination, depth):
 					(nx.get_node_attributes(Net,'obj')[cpath[i+1]].ship_in + 1):
 					print('-build reloading building at station {0}'\
 						.format(cpath[i]))
-					stations_data[cpath[i+1]][2] += 1
-				
+					stations_data[cpath[i+1]-1][2] += 1
 
-##Data
+	return 	[origin, destination, cpath, ccost]
+
+
+def addShipment(shipment_list, depth):
+	global rscost
+	global stations_data
+	global track_data
+	origin = int(input('Enter starting Station:'))
+	destination = int(input('Enter ending Station:'))
+	size = int(input('Enter Shipment size:'))
+	new_shipment = Shipment(origin, destination, size, [], [])
+	total_cost = 0
+	Net = initNetwork(shipment_list)
+	[a,b] = costUpdate(Net)
+	pNet = a
+	cost_dictionary = b
+	[origin, destination, cpath, ccost] = CheapestPath(Net, pNet, cost_dictionary, origin, destination, depth)
+	new_shipment.update(cpath)
+	total_cost += ccost
+	for i in range(1,size):
+		shipment_list.append(new_shipment)
+		Net = initNetwork(shipment_list)
+		shipment_list.pop()
+		[a,b] = costUpdate(Net)
+		pNet = a
+		cost_dictionary = b
+		[origin, destination, cpath, ccost] = CheapestPath(Net, pNet, cost_dictionary, origin, destination, depth)
+		new_shipment.update(cpath)
+		total_cost += ccost
+	print('total cost of addition: ${0}'.format(total_cost))
+	shipment_list.append(new_shipment)
+	return shipment_list
+
+
+
+#################Data################################
 rscost = 1000000
 
 stations_data = [[50,	0,		1,	0],
@@ -221,37 +272,26 @@ path = [[3,5,2]]
 vol = [3] 
 B = Shipment(3,2,3,path,vol)
 
-# path = [[4,1,3,5,2],[4,6,7,5,2]]
-# vol = [5,2] 
-# C = Shipment(4,2,7,path,vol)
+
+############################################################################3
 
 
+###RUN THE HEURISTIC:
+
+#addShipment adds a shipment to the network derived from the above data
+#--first argument is a list of the  current shipments on the network
+#--second argument controls how long of a path the heuristic looks for 
+#        (Warning: second argument has an outsized effect on run time
+#                  and higher search depths do not necissarily yield 
+#                  better solutions)
+
+shipment_list = addShipment([A,B],7)
 
 
+#print the shipments on the network for easy viewing 
+print('\nList of all shipments on Network:')
+for i in shipment_list:
+	i.displayinfo()
 
 
-
-
-####this is the what runs:
-shipment_list = [A,B]
-Net = initNetwork(shipment_list)
-
-[a,b] = costUpdate()
-pNet = a
-cost_dictionary = b
-
-CheapestPath(pNet, 2,4,7)
-
-
-
-
-shipment_list = [A,B]
-Net = initNetwork(shipment_list)
-
-[a,b] = costUpdate()
-pNet = a
-cost_dictionary = b
-
-
-CheapestPath(pNet, 2,4,7)
 
