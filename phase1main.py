@@ -93,7 +93,9 @@ path = [[3,5,2]]
 vol = [3] 
 B = Shipment(3,2,3,path,vol)
 
-
+# path = [[4,1,3,5,2],[4,6,7,5,2]]
+# vol = [5,2] 
+# C = Shipment(4,2,7,path,vol)
 
 
 
@@ -127,7 +129,8 @@ for i,x in enumerate(stations_data):
 ###Need to figure out how to put shipment data in?	
 
 for x in Net.nodes():
-	nx.get_node_attributes(Net,'obj')[1].fill([A,B])	
+	nx.get_node_attributes(Net,'obj')[1].fill([A,B])
+	print(nx.get_node_attributes(Net,'obj')[1].ship_in) #for debuging
 
 
 for x in Net.edges():
@@ -203,28 +206,6 @@ def CheapestPath(pNet, origin, destination, depth):
 
 
 ####this is the what runs:
-CheapestPath(pNet, 6,1,7)
+CheapestPath(pNet, 4,2,7)
 
 
-
-
-##make sure to add the best path to network at the end
-
-
-#print(pNet.out_edges(4))
-
-
-plt.savefig("psuedonetwork.png")
-
-
-
-
-					
-
-
-		
-
-
-
-nx.draw(Net)
-plt.savefig("path.png")
