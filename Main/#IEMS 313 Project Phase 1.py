@@ -139,31 +139,37 @@ def costUpdate(Net):
 		for j in Net.nodes():
 			x = Net.get_edge_data(i,j)
 			if type(x) is dict:
-				#cost tracks cost of traversing this edge
-				cost = 0
-				#if no edges along the path are built
-				y = Net.get_edge_data(j,i)
-				if (type(y) is dict and all(y[key]['obj'].is_built == 0 for key in y) ) and (all(x[key]['obj'].is_built == 0 for key in x)):
-					#calculate distance
-					dist = math.hypot(stations_data[i-1][0] - stations_data[j-1][0], \
-						stations_data[i-1][1] - stations_data[j-1][1])
-					#multiply distance by 7000 and add to cost
-					cost += (7000 + 5000)*dist
-				
-				#if line built but at capacity, need to build another so add that cost
-				if all((x[key]['obj'].load + 1) > 10 for key in x) or  (all(x[key]['obj'].is_built == 0 for key in x)):
-					#calculate distance
-					dist = math.hypot(stations_data[i-1][0] - stations_data[j-1][0], \
-						stations_data[i-1][1] - stations_data[j-1][1])
-					#multiply distance by 5000 and add to cost
-					cost += 5000*dist
-				if 5*(nx.get_node_attributes(Net,'obj')[j].reloading_buildings) < \
-					(nx.get_node_attributes(Net,'obj')[j].ship_in + 1):
-					#rscost is reloading station cost
-					cost += rscost
-				pNet.add_edge(i, j, weight=cost)
-				cost_dictionary['{0}--->{1}'.format(i,j)] = cost
+				#iterate through each edge in dictionary of edges along that path
+				for key in x:
+					#cost tracks cost of traversing this edge
+					cost = 0
+					#if no edges along the path are built
+					if all(x[key]['obj'].is_built == 0 for key in x):
+						#calculate distance
+						dist = math.hypot(stations_data[i-1][0] - stations_data[j-1][0], \
+							stations_data[i-1][1] - stations_data[j-1][1])
+						#multiply distance by 7000 and add to cost
+						cost += (7000 + 5000)*dist
+					
+					#if line built but at capacity, need to build another so add that cost
+					if (x[key]['obj'].load + 1) > 10:
+						#calculate distance
+						dist = math.hypot(stations_data[i-1][0] - stations_data[j-1][0], \
+							stations_data[i-1][1] - stations_data[j-1][1])
+						#multiply distance by 5000 and add to cost
+						cost += 5000*dist
+
+					#if not enough reloading stations at destination, add that cost
+					if 5*nx.get_node_attributes(Net,'obj')[j].reloading_buildings < \
+						(nx.get_node_attributes(Net,'obj')[j].ship_in + 1) & (key == 0):
+						#rscost is reloading station cost
+						cost += rscost
+					if pNet.has_edge(i,j):
+						pass
+					pNet.add_edge(i, j, weight=cost)
+					cost_dictionary['{0}--->{1}'.format(i,j)] = cost
 	return [pNet,cost_dictionary]
+
 
 
 
@@ -178,46 +184,39 @@ def CheapestPath(Net, pNet, cost_dictionary, origin, destination, depth):
 	cost_path_dict = {}
 	for path in nx.all_simple_paths(pNet, source=origin, target=destination, cutoff = depth):
 		cost = 0
-		#check if we need to add cost of reloading buildings for start nodes
-		if (5*(nx.get_node_attributes(Net,'obj')[path[0]].reloading_buildings)) < (nx.get_node_attributes(Net,'obj')[path[0]].ship_in + 1):
-			#rscost is cost of adding reloading station
-			cost += rscost
 		for i in range(0,len(path) - 1):
 			cost += cost_dictionary['{0}--->{1}'.format(path[i],path[i +1])]
 		cost_path_dict[cost] = path
 	##find cheapest path and its cost
+	cpath = cost_path_dict[min(list(cost_path_dict.keys()))]
 	ccost = min(list(cost_path_dict.keys()))
-	cpath = cost_path_dict[ccost]
-	print('For next additional unit, Cheapest Path from {0} to {1} is {2} at ${3}'.format(origin,destination,\
+	print('Cheapest Path from {0} to {1} is {2} at ${3}'.format(origin,destination,\
 		cpath, ccost))
 	##find recomendations based on that path
 	for i in range(0,len(cpath) - 1):
 		x = Net.get_edge_data(cpath[i],cpath[i+1])
 		if type(x) is dict:
-			#if no edges along the path are built
-			y = Net.get_edge_data(cpath[i+1], cpath[i])
-			if (type(y) is dict and all(y[key]['obj'].is_built == 0 for key in y) ) and all(x[key]['obj'].is_built == 0 for key in x):
-				print('  -build path and track from {0} to {1}'\
-					.format(cpath[i],cpath[i+1]))
-				track_data.append([cpath[i],cpath[i+1],1])
-			
-			#if line built but at capacity, need to build another so add that cost
-			if all((x[key]['obj'].load + 1) > 10 for key in x) or all(x[key]['obj'].is_built == 0 for key in x):
-				print('  -build track from {0} to {1}'\
-					.format(cpath[i],cpath[i+1]))
-				track_data.append([cpath[i],cpath[i+1],1])
 			#iterate through each edge in dictionary of edges along that path
 			#print(x) #print edge objects for debuging
-			#track reloading buildings added
-			rl_added = 0
 			for key in x:
-				#if not enough reloading stations at destination, add that cost
-				if 5*(nx.get_node_attributes(Net,'obj')[cpath[i+1]].reloading_buildings+rl_added) < \
-					(nx.get_node_attributes(Net,'obj')[cpath[i+1]].ship_in + 1):
-					print('  -build reloading building at station {0}'\
-						.format(cpath[i]))
-					stations_data[cpath[i+1]-1][2] += 1
-					rl_added += 1
+				#if no edges along the path are built
+				if all(x[key]['obj'].is_built == 0 for key in x):
+					print('  -build path and track from {0} to {1}'\
+						.format(cpath[i],cpath[i+1]))
+					track_data.append([cpath[i],cpath[i+1],1])
+				
+				#if line built but at capacity, need to build another so add that cost
+				if all((x[key]['obj'].load + 1) > 10 for key in x):
+					print('  -build track from {0} to {1}'\
+						.format(cpath[i],cpath[i+1]))
+					track_data.append([cpath[i],cpath[i+1],1])
+
+			#if not enough reloading stations at destination, add that cost
+			if 5*nx.get_node_attributes(Net,'obj')[cpath[i+1]].reloading_buildings < \
+				(nx.get_node_attributes(Net,'obj')[cpath[i+1]].ship_in + 1):
+				print('  -build reloading building at station {0}'\
+					.format(cpath[i]))
+				stations_data[cpath[i+1]-1][2] += 1
 
 	return 	[origin, destination, cpath, ccost]
 
@@ -295,16 +294,14 @@ B = Shipment(3,2,3,path,vol)
 
 
 shipment_list = [A,B]
-sd = int(input('Max Path Length: '))
 while 1:
 	#addShipment adds a shipment to the network derived from the above data
 	#--first argument is a list of the  current shipments on the network
 	#--second argument controls how long of a path the heuristic looks for 
 	#        (Warning: second argument has an outsized effect on run time
 	#                  and higher search depths do not necissarily yield 
-	#                  better solutions
-	
-	shipment_list = addShipment(shipment_list,sd)
+	#                  better solutions)
+	shipment_list = addShipment(shipment_list,7)
 
 
 	#print the shipments on the network for easy viewing 
@@ -319,6 +316,3 @@ while 1:
 	else:
 		print('\nHave a nice day :)')
 		break
-
-
-
