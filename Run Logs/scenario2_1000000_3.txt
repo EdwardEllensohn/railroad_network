@@ -1,0 +1,31 @@
+[Anaconda3] C:\Users\Edward\Documents\Spring 2016\IEMS 313\Phase 1\Main>python main.py
+Max Path Length: 3
+Enter starting Station:4
+Enter ending Station:2
+Enter Shipment size:9
+For next additional unit, Cheapest Path from 4 to 2 is [4, 3, 5, 2] at $1341640.7864998737
+  -build path and track from 4 to 3
+For next additional unit, Cheapest Path from 4 to 2 is [4, 3, 5, 2] at $0
+For next additional unit, Cheapest Path from 4 to 2 is [4, 3, 5, 2] at $1000000
+  -build reloading building at station 2
+For next additional unit, Cheapest Path from 4 to 2 is [4, 3, 5, 2] at $0
+For next additional unit, Cheapest Path from 4 to 2 is [4, 3, 5, 2] at $3000000
+  -build reloading building at station 4
+  -build reloading building at station 3
+  -build reloading building at station 5
+For next additional unit, Cheapest Path from 4 to 2 is [4, 3, 5, 2] at $0
+For next additional unit, Cheapest Path from 4 to 2 is [4, 3, 5, 2] at $0
+For next additional unit, Cheapest Path from 4 to 2 is [4, 3, 5, 2] at $1000000
+  -build reloading building at station 2
+For next additional unit, Cheapest Path from 4 to 2 is [4, 3, 5, 2] at $0
+total cost of addition: $6341640.786499874
+
+List of all shipments on Network:
+Shipment from 4 to 7 with total volume 11:
+  Path 1: [4, 6, 7] with volume 8
+  Path 2: [4, 1, 3, 5, 7] with volume 3
+Shipment from 3 to 2 with total volume 3:
+  Path 1: [3, 5, 2] with volume 3
+Shipment from 4 to 2 with total volume 9:
+  Path 1: [4, 3, 5, 2] with volume 9
+Add another shipment? (type "yes" to continue):

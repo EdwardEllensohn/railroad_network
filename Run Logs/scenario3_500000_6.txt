@@ -1,0 +1,56 @@
+[Anaconda3] C:\Users\Edward\Documents\Spring 2016\IEMS 313\Phase 1\Main>python main.py
+Max Path Length: 6
+Enter starting Station:6
+Enter ending Station:3
+Enter Shipment size:8
+For next additional unit, Cheapest Path from 6 to 3 is [6, 4, 1, 3] at $707106.7811865476
+  -build track from 6 to 4
+For next additional unit, Cheapest Path from 6 to 3 is [6, 4, 1, 3] at $0
+For next additional unit, Cheapest Path from 6 to 3 is [6, 4, 1, 3] at $1000000
+  -build reloading building at station 6
+  -build reloading building at station 1
+For next additional unit, Cheapest Path from 6 to 3 is [6, 4, 1, 3] at $0
+For next additional unit, Cheapest Path from 6 to 3 is [6, 4, 1, 3] at $1000000
+  -build reloading building at station 4
+  -build reloading building at station 3
+For next additional unit, Cheapest Path from 6 to 3 is [6, 4, 1, 3] at $0
+For next additional unit, Cheapest Path from 6 to 3 is [6, 4, 1, 3] at $0
+For next additional unit, Cheapest Path from 6 to 3 is [6, 4, 1, 3] at $1000000
+  -build reloading building at station 6
+  -build reloading building at station 1
+total cost of addition: $3707106.7811865476
+
+List of all shipments on Network:
+Shipment from 4 to 7 with total volume 11:
+  Path 1: [4, 6, 7] with volume 8
+  Path 2: [4, 1, 3, 5, 7] with volume 3
+Shipment from 3 to 2 with total volume 3:
+  Path 1: [3, 5, 2] with volume 3
+Shipment from 6 to 3 with total volume 8:
+  Path 1: [6, 4, 1, 3] with volume 8
+Add another shipment? (type "yes" to continue):yes
+yes
+
+Next iteration:
+Enter starting Station:7
+Enter ending Station:1
+Enter Shipment size:4
+For next additional unit, Cheapest Path from 7 to 1 is [7, 6, 4, 1] at $500000.0
+  -build track from 7 to 6
+For next additional unit, Cheapest Path from 7 to 1 is [7, 6, 4, 1] at $500000
+  -build reloading building at station 4
+For next additional unit, Cheapest Path from 7 to 1 is [7, 6, 4, 1] at $0
+For next additional unit, Cheapest Path from 7 to 1 is [7, 6, 4, 1] at $0
+total cost of addition: $1000000.0
+
+List of all shipments on Network:
+Shipment from 4 to 7 with total volume 11:
+  Path 1: [4, 6, 7] with volume 8
+  Path 2: [4, 1, 3, 5, 7] with volume 3
+Shipment from 3 to 2 with total volume 3:
+  Path 1: [3, 5, 2] with volume 3
+Shipment from 6 to 3 with total volume 8:
+  Path 1: [6, 4, 1, 3] with volume 8
+Shipment from 7 to 1 with total volume 4:
+  Path 1: [7, 6, 4, 1] with volume 4
+Add another shipment? (type "yes" to continue):

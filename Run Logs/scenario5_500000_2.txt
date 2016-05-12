@@ -1,0 +1,276 @@
+Deactivating environment "C:\Users\Edward\Anaconda3"...
+Activating environment "C:\Users\Edward\Anaconda3"...
+
+[Anaconda3] C:\Users\Edward>cd Documents
+
+[Anaconda3] C:\Users\Edward\Documents>cd "Spring 2016"
+
+[Anaconda3] C:\Users\Edward\Documents\Spring 2016>cd "IEMS 313"
+
+[Anaconda3] C:\Users\Edward\Documents\Spring 2016\IEMS 313>cd "Phase 1"
+
+[Anaconda3] C:\Users\Edward\Documents\Spring 2016\IEMS 313\Phase 1>dir
+ Volume in drive C is OS
+ Volume Serial Number is 58A2-A5A2
+
+ Directory of C:\Users\Edward\Documents\Spring 2016\IEMS 313\Phase 1
+
+05/11/2016  04:33 PM    <DIR>          .
+05/11/2016  04:33 PM    <DIR>          ..
+05/11/2016  04:36 PM    <DIR>          Main
+05/07/2016  06:45 PM           270,049 ProjectPhase1.pdf
+05/11/2016  04:26 PM            14,451 scenario5_500000_13.txt
+05/11/2016  04:33 PM            13,933 scenario5_500000_3.txt
+05/11/2016  04:31 PM            14,401 scenario5_500000_4.txt
+05/11/2016  04:28 PM            14,134 scenario5_500000_5.txt
+05/09/2016  12:03 PM    <DIR>          Scratch work
+05/09/2016  01:21 AM    <DIR>          __pycache__
+               5 File(s)        326,968 bytes
+               5 Dir(s)  710,531,248,128 bytes free
+
+[Anaconda3] C:\Users\Edward\Documents\Spring 2016\IEMS 313\Phase 1>cd Main
+
+[Anaconda3] C:\Users\Edward\Documents\Spring 2016\IEMS 313\Phase 1\Main>dir
+ Volume in drive C is OS
+ Volume Serial Number is 58A2-A5A2
+
+ Directory of C:\Users\Edward\Documents\Spring 2016\IEMS 313\Phase 1\Main
+
+05/11/2016  04:36 PM    <DIR>          .
+05/11/2016  04:36 PM    <DIR>          ..
+05/10/2016  02:34 PM             9,910 #IEMS 313 Project Phase 1.py
+05/11/2016  01:40 AM            11,728 bonus.py
+05/11/2016  04:17 PM            12,804 bonus1.py
+05/11/2016  04:04 PM            12,180 main.py
+05/11/2016  12:35 AM            11,019 phase1main.py
+05/11/2016  04:36 PM                 0 python
+               6 File(s)         57,641 bytes
+               2 Dir(s)  710,531,248,128 bytes free
+
+[Anaconda3] C:\Users\Edward\Documents\Spring 2016\IEMS 313\Phase 1\Main>python bonus1.py
+Max Path Length: 2
+Enter starting Station:10
+Enter ending Station:1
+Enter Shipment size:8
+For next additional unit, Cheapest Path from 10 to 1 is [10, 7, 1] at $5519447.787642168
+  -build path and track from 10 to 7
+  -build reloading building at station 7
+  -build path and track from 7 to 1
+For next additional unit, Cheapest Path from 10 to 1 is [10, 7, 1] at $500000
+  -build reloading building at station 10
+For next additional unit, Cheapest Path from 10 to 1 is [10, 7, 1] at $0
+For next additional unit, Cheapest Path from 10 to 1 is [10, 7, 1] at $500000
+  -build reloading building at station 1
+For next additional unit, Cheapest Path from 10 to 1 is [10, 7, 1] at $0
+For next additional unit, Cheapest Path from 10 to 1 is [10, 7, 1] at $500000
+  -build reloading building at station 7
+For next additional unit, Cheapest Path from 10 to 1 is [10, 7, 1] at $500000
+  -build reloading building at station 10
+For next additional unit, Cheapest Path from 10 to 1 is [10, 7, 1] at $0
+total cost of addition: $7519447.787642168
+
+List of all shipments on Network:
+Shipment from 1 to 13 with total volume 17:
+  Path 1: [1, 5, 9, 12, 11, 14, 13] with volume 9
+  Path 2: [1, 2, 7, 6, 8, 10, 13] with volume 5
+  Path 3: [1, 2, 3, 4, 10, 13] with volume 3
+Shipment from 5 to 10 with total volume 8:
+  Path 1: [5, 2, 7, 6, 8, 10] with volume 5
+  Path 2: [5, 9, 12, 11, 14, 13, 10] with volume 3
+Shipment from 9 to 4 with total volume 8:
+  Path 1: [9, 5, 2, 3, 4] with volume 8
+Shipment from 14 to 13 with total volume 7:
+  Path 1: [14, 13, 10, 4, 3] with volume 7
+Shipment from 13 to 6 with total volume 6:
+  Path 1: [13, 10, 8, 6] with volume 6
+Shipment from 10 to 1 with total volume 8:
+  Path 1: [10, 7, 1] with volume 8
+Add another shipment? (type "yes" to continue):yes
+yes
+
+Next iteration:
+Enter starting Station:10
+Enter ending Station:9
+Enter Shipment size:4
+For next additional unit, Cheapest Path from 10 to 9 is [10, 7, 9] at $1841640.7864998737
+  -build path and track from 7 to 9
+  -build reloading building at station 9
+For next additional unit, Cheapest Path from 10 to 9 is [10, 7, 9] at $0
+For next additional unit, Cheapest Path from 10 to 9 is [10, 7, 9] at $500000
+  -build reloading building at station 7
+For next additional unit, Cheapest Path from 10 to 9 is [10, 7, 9] at $500000
+  -build reloading building at station 10
+total cost of addition: $2841640.7864998737
+
+List of all shipments on Network:
+Shipment from 1 to 13 with total volume 17:
+  Path 1: [1, 5, 9, 12, 11, 14, 13] with volume 9
+  Path 2: [1, 2, 7, 6, 8, 10, 13] with volume 5
+  Path 3: [1, 2, 3, 4, 10, 13] with volume 3
+Shipment from 5 to 10 with total volume 8:
+  Path 1: [5, 2, 7, 6, 8, 10] with volume 5
+  Path 2: [5, 9, 12, 11, 14, 13, 10] with volume 3
+Shipment from 9 to 4 with total volume 8:
+  Path 1: [9, 5, 2, 3, 4] with volume 8
+Shipment from 14 to 13 with total volume 7:
+  Path 1: [14, 13, 10, 4, 3] with volume 7
+Shipment from 13 to 6 with total volume 6:
+  Path 1: [13, 10, 8, 6] with volume 6
+Shipment from 10 to 1 with total volume 8:
+  Path 1: [10, 7, 1] with volume 8
+Shipment from 10 to 9 with total volume 4:
+  Path 1: [10, 7, 9] with volume 4
+Add another shipment? (type "yes" to continue):yes
+yes
+
+Next iteration:
+Enter starting Station:11
+Enter ending Station:6
+Enter Shipment size:5
+For next additional unit, Cheapest Path from 11 to 6 is [11, 7, 6] at $1200000.0
+  -build path and track from 11 to 7
+For next additional unit, Cheapest Path from 11 to 6 is [11, 7, 6] at $0
+For next additional unit, Cheapest Path from 11 to 6 is [11, 7, 6] at $0
+For next additional unit, Cheapest Path from 11 to 6 is [11, 7, 6] at $1000000
+  -build reloading building at station 11
+  -build reloading building at station 7
+For next additional unit, Cheapest Path from 11 to 6 is [11, 7, 6] at $500000
+  -build reloading building at station 6
+total cost of addition: $2700000.0
+
+List of all shipments on Network:
+Shipment from 1 to 13 with total volume 17:
+  Path 1: [1, 5, 9, 12, 11, 14, 13] with volume 9
+  Path 2: [1, 2, 7, 6, 8, 10, 13] with volume 5
+  Path 3: [1, 2, 3, 4, 10, 13] with volume 3
+Shipment from 5 to 10 with total volume 8:
+  Path 1: [5, 2, 7, 6, 8, 10] with volume 5
+  Path 2: [5, 9, 12, 11, 14, 13, 10] with volume 3
+Shipment from 9 to 4 with total volume 8:
+  Path 1: [9, 5, 2, 3, 4] with volume 8
+Shipment from 14 to 13 with total volume 7:
+  Path 1: [14, 13, 10, 4, 3] with volume 7
+Shipment from 13 to 6 with total volume 6:
+  Path 1: [13, 10, 8, 6] with volume 6
+Shipment from 10 to 1 with total volume 8:
+  Path 1: [10, 7, 1] with volume 8
+Shipment from 10 to 9 with total volume 4:
+  Path 1: [10, 7, 9] with volume 4
+Shipment from 11 to 6 with total volume 5:
+  Path 1: [11, 7, 6] with volume 5
+Add another shipment? (type "yes" to continue):yes
+yes
+
+Next iteration:
+Enter starting Station:9
+Enter ending Station:10
+Enter Shipment size:20
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $1589793.4007793625
+  -build track from 9 to 7
+  -build track from 7 to 10
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $500000
+  -build reloading building at station 9
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $0
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $500000
+  -build reloading building at station 7
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $500000
+  -build reloading building at station 10
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $0
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $500000
+  -build reloading building at station 9
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $0
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $500000
+  -build reloading building at station 7
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $500000
+  -build reloading building at station 10
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $0
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $500000
+  -build reloading building at station 9
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $0
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $500000
+  -build reloading building at station 7
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $500000
+  -build reloading building at station 10
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $0
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $500000
+  -build reloading building at station 9
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $0
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $500000
+  -build reloading building at station 7
+For next additional unit, Cheapest Path from 9 to 10 is [9, 7, 10] at $500000
+  -build reloading building at station 10
+total cost of addition: $7589793.400779363
+
+List of all shipments on Network:
+Shipment from 1 to 13 with total volume 17:
+  Path 1: [1, 5, 9, 12, 11, 14, 13] with volume 9
+  Path 2: [1, 2, 7, 6, 8, 10, 13] with volume 5
+  Path 3: [1, 2, 3, 4, 10, 13] with volume 3
+Shipment from 5 to 10 with total volume 8:
+  Path 1: [5, 2, 7, 6, 8, 10] with volume 5
+  Path 2: [5, 9, 12, 11, 14, 13, 10] with volume 3
+Shipment from 9 to 4 with total volume 8:
+  Path 1: [9, 5, 2, 3, 4] with volume 8
+Shipment from 14 to 13 with total volume 7:
+  Path 1: [14, 13, 10, 4, 3] with volume 7
+Shipment from 13 to 6 with total volume 6:
+  Path 1: [13, 10, 8, 6] with volume 6
+Shipment from 10 to 1 with total volume 8:
+  Path 1: [10, 7, 1] with volume 8
+Shipment from 10 to 9 with total volume 4:
+  Path 1: [10, 7, 9] with volume 4
+Shipment from 11 to 6 with total volume 5:
+  Path 1: [11, 7, 6] with volume 5
+Shipment from 9 to 10 with total volume 20:
+  Path 1: [9, 7, 10] with volume 20
+Add another shipment? (type "yes" to continue):yes
+yes
+
+Next iteration:
+Enter starting Station:4
+Enter ending Station:11
+Enter Shipment size:10
+For next additional unit, Cheapest Path from 4 to 11 is [4, 10, 11] at $2473863.3753705965
+  -build path and track from 10 to 11
+For next additional unit, Cheapest Path from 4 to 11 is [4, 10, 11] at $0
+For next additional unit, Cheapest Path from 4 to 11 is [4, 10, 11] at $500000
+  -build reloading building at station 4
+For next additional unit, Cheapest Path from 4 to 11 is [4, 10, 11] at $500000
+  -build reloading building at station 11
+For next additional unit, Cheapest Path from 4 to 11 is [4, 10, 11] at $500000
+  -build reloading building at station 10
+For next additional unit, Cheapest Path from 4 to 11 is [4, 10, 11] at $0
+For next additional unit, Cheapest Path from 4 to 11 is [4, 10, 11] at $0
+For next additional unit, Cheapest Path from 4 to 11 is [4, 10, 11] at $500000
+  -build reloading building at station 4
+For next additional unit, Cheapest Path from 4 to 11 is [4, 10, 11] at $500000
+  -build reloading building at station 11
+For next additional unit, Cheapest Path from 4 to 11 is [4, 10, 11] at $500000
+  -build reloading building at station 10
+total cost of addition: $5473863.375370597
+
+List of all shipments on Network:
+Shipment from 1 to 13 with total volume 17:
+  Path 1: [1, 5, 9, 12, 11, 14, 13] with volume 9
+  Path 2: [1, 2, 7, 6, 8, 10, 13] with volume 5
+  Path 3: [1, 2, 3, 4, 10, 13] with volume 3
+Shipment from 5 to 10 with total volume 8:
+  Path 1: [5, 2, 7, 6, 8, 10] with volume 5
+  Path 2: [5, 9, 12, 11, 14, 13, 10] with volume 3
+Shipment from 9 to 4 with total volume 8:
+  Path 1: [9, 5, 2, 3, 4] with volume 8
+Shipment from 14 to 13 with total volume 7:
+  Path 1: [14, 13, 10, 4, 3] with volume 7
+Shipment from 13 to 6 with total volume 6:
+  Path 1: [13, 10, 8, 6] with volume 6
+Shipment from 10 to 1 with total volume 8:
+  Path 1: [10, 7, 1] with volume 8
+Shipment from 10 to 9 with total volume 4:
+  Path 1: [10, 7, 9] with volume 4
+Shipment from 11 to 6 with total volume 5:
+  Path 1: [11, 7, 6] with volume 5
+Shipment from 9 to 10 with total volume 20:
+  Path 1: [9, 7, 10] with volume 20
+Shipment from 4 to 11 with total volume 10:
+  Path 1: [4, 10, 11] with volume 10
+Add another shipment? (type "yes" to continue):
